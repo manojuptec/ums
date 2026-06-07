@@ -7,7 +7,6 @@ select * from  public.user_login_logout(
 	'asdrt':: character varying,
 	null:: text[],
 	'login'::character varying)
-	
 */
 CREATE OR REPLACE FUNCTION public.user_login_logout(
     _logged_user_id integer,
@@ -48,9 +47,9 @@ DECLARE
 	 
 	 
       -- Insert new entry for current device
-	  INSERT INTO user_token (user_id, token, user_device,ip) 
-	  VALUES (_user_id, _token,_sessioninfo[0],_sessioninfo[1]);
-      	RETURN  json_build_object('data',json_build_object('id',_user_id, 'status',_status,'name',_name,'added_date',_added_date,'email',_email),'message','User logged in successfully!','status',1);  
+	  INSERT INTO user_token (user_id, token) 
+	  VALUES (_user_id, _token);
+      	RETURN  json_build_object('id',_user_id, 'status',_status,'name',_name,'added_date',_added_date,'email',_email,'message','User logged in successfully!','status',1);  
      elseif _action = 'logout' then 
       if _logged_user_id is null  then 
 	 RAISE EXCEPTION 'User id is required';

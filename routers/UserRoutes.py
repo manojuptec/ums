@@ -1,10 +1,10 @@
 
 
-from fastapi import APIRouter, Query,status
+from fastapi import APIRouter,Header, Query,status
 from typing import List,Optional
-from controllers.UserControllers import get_users,create_user
+from controllers.UserControllers import get_users,create_user,login_user,user_logout
 from schemas.user_schema import User,CreateUser
-from schemas.user_schema import UserResponse,UserCreateResponse,PostUser
+from schemas.user_schema import UserResponse,UserCreateResponse,PostUser,LoginUser,UserLogout
 from fastapi.responses import JSONResponse
 router = APIRouter(prefix="", tags=["Users"])
 
@@ -26,3 +26,20 @@ user_id:int
 @router.post("/api/register", response_model=PostUser, summary="Register user",status_code=status.HTTP_201_CREATED)
 def add_user(user: CreateUser):
     return create_user(user)
+@router.post("/api/login", response_model=UserResponse, summary="Login user",status_code=status.HTTP_201_CREATED)
+def user_login(user: LoginUser):
+    data= login_user(user)
+    return JSONResponse(
+        status_code=200,
+        content=data
+    )
+@router.post("/user/logout", response_model=UserLogout, summary="Logout User")
+def logout(
+    user_id: int = Query(..., description="User ID"),
+    token: str = Header(..., description="User Token")
+):
+ data = user_logout(user_id,token)
+ return JSONResponse(
+        status_code=200,
+        content=data
+    )

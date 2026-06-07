@@ -30,3 +30,12 @@ class PostUser(BaseModel):
 class UserCreateResponse(BaseModel):
     message: str
     data: PostUser  
+
+# 🔹 Request Model (input)
+class LoginUser(BaseModel):
+    email: EmailStr
+    password: str
+class UserLogout(BaseModel):
+    message: str
+    data: None
+    status: int
